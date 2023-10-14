@@ -2,14 +2,15 @@ package az.iktlab.bookstore.model.entity;
 
 import lombok.*;
 
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 
 @Entity
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
@@ -31,10 +32,13 @@ public class User {
     @Column(name = "contact_number")
     String contactNumber;
 
+    @Column(name = "registration_date",columnDefinition = "TIMESTAMP default now()")
+    LocalDateTime registrationDate = LocalDateTime.now();
+
     @OneToOne
     @JoinColumn(name = "account_id")
     Account account;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     Set<Review> reviews;
 }

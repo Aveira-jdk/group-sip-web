@@ -21,19 +21,28 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @Column(name = "title")
     String title;
 
+    @Column(name = "synopsis",columnDefinition = "TEXT")
     String synopsis;
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book",fetch = FetchType.EAGER)
     Set<Review> reviews;
 
-    /*
-    title (kitabın adı)
-author_id (müəllifin identifikatoru)
-genre_id (janrın identifikatoru)
-publication_date (nəşr tarixi)
-synopsis (kitabın təsviri)
-average_rating (ortalama reytinq)
-     */
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "books_genres",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    Set<Genre> genres;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "authors_books",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+    Set<Author> authors;
 }
